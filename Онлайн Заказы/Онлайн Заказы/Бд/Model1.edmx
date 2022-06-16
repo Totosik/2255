@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище user_userModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Возвраты">
+          <Key>
+            <PropertyRef Name="Коробока" />
+          </Key>
+          <Property Name="Коробока" Type="int" Nullable="false" />
+          <Property Name="Количество_товаров" Type="int" Nullable="false" />
+          <Property Name="Товары_в_коробке" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ЗаказаноТоваров">
+          <Key>
+            <PropertyRef Name="ЗаказID" />
+          </Key>
+          <Property Name="ЗаказID" Type="int" Nullable="false" />
+          <Property Name="СкладID" Type="int" Nullable="false" />
+          <Property Name="Количество" Type="int" Nullable="false" />
+          <Property Name="Цена_Продажи" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Заказы">
+          <Key>
+            <PropertyRef Name="ЗаказID" />
+          </Key>
+          <Property Name="ЗаказID" Type="int" Nullable="false" />
+          <Property Name="КлиентID" Type="int" Nullable="false" />
+          <Property Name="Ячейка" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ДатаЗаказа" Type="date" Nullable="false" />
+          <Property Name="Сумма" Type="int" Nullable="false" />
+          <Property Name="Количество" Type="int" Nullable="false" />
+          <Property Name="Отмена" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Клиенты">
+          <Key>
+            <PropertyRef Name="КлиентID" />
+          </Key>
+          <Property Name="КлиентID" Type="int" Nullable="false" />
+          <Property Name="Фамилия" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="имя" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Телефон" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Склад">
+          <Key>
+            <PropertyRef Name="СкладID" />
+          </Key>
+          <Property Name="СкладID" Type="int" Nullable="false" />
+          <Property Name="Место" Type="int" Nullable="false" />
+          <Property Name="Код_товара" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="ЗаказаноТоваров_fk0">
+          <End Role="Заказы" Type="Self.Заказы" Multiplicity="1" />
+          <End Role="ЗаказаноТоваров" Type="Self.ЗаказаноТоваров" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Заказы">
+              <PropertyRef Name="ЗаказID" />
+            </Principal>
+            <Dependent Role="ЗаказаноТоваров">
+              <PropertyRef Name="ЗаказID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ЗаказаноТоваров_fk1">
+          <End Role="Склад" Type="Self.Склад" Multiplicity="1" />
+          <End Role="ЗаказаноТоваров" Type="Self.ЗаказаноТоваров" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Склад">
+              <PropertyRef Name="СкладID" />
+            </Principal>
+            <Dependent Role="ЗаказаноТоваров">
+              <PropertyRef Name="СкладID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Заказы_fk0">
+          <End Role="Клиенты" Type="Self.Клиенты" Multiplicity="1" />
+          <End Role="Заказы" Type="Self.Заказы" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Клиенты">
+              <PropertyRef Name="КлиентID" />
+            </Principal>
+            <Dependent Role="Заказы">
+              <PropertyRef Name="КлиентID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Заказы_fk1">
+          <End Role="Возвраты" Type="Self.Возвраты" Multiplicity="1" />
+          <End Role="Заказы" Type="Self.Заказы" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Возвраты">
+              <PropertyRef Name="Коробока" />
+            </Principal>
+            <Dependent Role="Заказы">
+              <PropertyRef Name="Отмена" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище user_userModelContainer">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Возвраты" EntityType="Self.Возвраты" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ЗаказаноТоваров" EntityType="Self.ЗаказаноТоваров" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Заказы" EntityType="Self.Заказы" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Клиенты" EntityType="Self.Клиенты" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Склад" EntityType="Self.Склад" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="ЗаказаноТоваров_fk0" Association="Self.ЗаказаноТоваров_fk0">
+            <End Role="Заказы" EntitySet="Заказы" />
+            <End Role="ЗаказаноТоваров" EntitySet="ЗаказаноТоваров" />
+          </AssociationSet>
+          <AssociationSet Name="ЗаказаноТоваров_fk1" Association="Self.ЗаказаноТоваров_fk1">
+            <End Role="Склад" EntitySet="Склад" />
+            <End Role="ЗаказаноТоваров" EntitySet="ЗаказаноТоваров" />
+          </AssociationSet>
+          <AssociationSet Name="Заказы_fk0" Association="Self.Заказы_fk0">
+            <End Role="Клиенты" EntitySet="Клиенты" />
+            <End Role="Заказы" EntitySet="Заказы" />
+          </AssociationSet>
+          <AssociationSet Name="Заказы_fk1" Association="Self.Заказы_fk1">
+            <End Role="Возвраты" EntitySet="Возвраты" />
+            <End Role="Заказы" EntitySet="Заказы" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="user_userModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Возвраты">
+          <Key>
+            <PropertyRef Name="Коробока" />
+          </Key>
+          <Property Name="Коробока" Type="Int32" Nullable="false" />
+          <Property Name="Количество_товаров" Type="Int32" Nullable="false" />
+          <Property Name="Товары_в_коробке" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Заказы" Relationship="Self.Заказы_fk1" FromRole="Возвраты" ToRole="Заказы" />
+        </EntityType>
+        <EntityType Name="ЗаказаноТоваров">
+          <Key>
+            <PropertyRef Name="ЗаказID" />
+          </Key>
+          <Property Name="ЗаказID" Type="Int32" Nullable="false" />
+          <Property Name="СкладID" Type="Int32" Nullable="false" />
+          <Property Name="Количество" Type="Int32" Nullable="false" />
+          <Property Name="Цена_Продажи" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Заказы" Relationship="Self.ЗаказаноТоваров_fk0" FromRole="ЗаказаноТоваров" ToRole="Заказы" />
+          <NavigationProperty Name="Склад" Relationship="Self.ЗаказаноТоваров_fk1" FromRole="ЗаказаноТоваров" ToRole="Склад" />
+        </EntityType>
+        <EntityType Name="Заказы">
+          <Key>
+            <PropertyRef Name="ЗаказID" />
+          </Key>
+          <Property Name="ЗаказID" Type="Int32" Nullable="false" />
+          <Property Name="КлиентID" Type="Int32" Nullable="false" />
+          <Property Name="Ячейка" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ДатаЗаказа" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Сумма" Type="Int32" Nullable="false" />
+          <Property Name="Количество" Type="Int32" Nullable="false" />
+          <Property Name="Отмена" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Возвраты" Relationship="Self.Заказы_fk1" FromRole="Заказы" ToRole="Возвраты" />
+          <NavigationProperty Name="ЗаказаноТоваров" Relationship="Self.ЗаказаноТоваров_fk0" FromRole="Заказы" ToRole="ЗаказаноТоваров" />
+          <NavigationProperty Name="Клиенты" Relationship="Self.Заказы_fk0" FromRole="Заказы" ToRole="Клиенты" />
+        </EntityType>
+        <EntityType Name="Клиенты">
+          <Key>
+            <PropertyRef Name="КлиентID" />
+          </Key>
+          <Property Name="КлиентID" Type="Int32" Nullable="false" />
+          <Property Name="Фамилия" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="имя" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Телефон" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Заказы" Relationship="Self.Заказы_fk0" FromRole="Клиенты" ToRole="Заказы" />
+        </EntityType>
+        <EntityType Name="Склад">
+          <Key>
+            <PropertyRef Name="СкладID" />
+          </Key>
+          <Property Name="СкладID" Type="Int32" Nullable="false" />
+          <Property Name="Место" Type="Int32" Nullable="false" />
+          <Property Name="Код_товара" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ЗаказаноТоваров" Relationship="Self.ЗаказаноТоваров_fk1" FromRole="Склад" ToRole="ЗаказаноТоваров" />
+        </EntityType>
+        <Association Name="Заказы_fk1">
+          <End Role="Возвраты" Type="Self.Возвраты" Multiplicity="1" />
+          <End Role="Заказы" Type="Self.Заказы" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Возвраты">
+              <PropertyRef Name="Коробока" />
+            </Principal>
+            <Dependent Role="Заказы">
+              <PropertyRef Name="Отмена" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ЗаказаноТоваров_fk0">
+          <End Role="Заказы" Type="Self.Заказы" Multiplicity="1" />
+          <End Role="ЗаказаноТоваров" Type="Self.ЗаказаноТоваров" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Заказы">
+              <PropertyRef Name="ЗаказID" />
+            </Principal>
+            <Dependent Role="ЗаказаноТоваров">
+              <PropertyRef Name="ЗаказID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ЗаказаноТоваров_fk1">
+          <End Role="Склад" Type="Self.Склад" Multiplicity="1" />
+          <End Role="ЗаказаноТоваров" Type="Self.ЗаказаноТоваров" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Склад">
+              <PropertyRef Name="СкладID" />
+            </Principal>
+            <Dependent Role="ЗаказаноТоваров">
+              <PropertyRef Name="СкладID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Заказы_fk0">
+          <End Role="Клиенты" Type="Self.Клиенты" Multiplicity="1" />
+          <End Role="Заказы" Type="Self.Заказы" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Клиенты">
+              <PropertyRef Name="КлиентID" />
+            </Principal>
+            <Dependent Role="Заказы">
+              <PropertyRef Name="КлиентID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="user_userEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Возвраты" EntityType="Self.Возвраты" />
+          <EntitySet Name="ЗаказаноТоваров" EntityType="Self.ЗаказаноТоваров" />
+          <EntitySet Name="Заказы" EntityType="Self.Заказы" />
+          <EntitySet Name="Клиенты" EntityType="Self.Клиенты" />
+          <EntitySet Name="Склад" EntityType="Self.Склад" />
+          <AssociationSet Name="Заказы_fk1" Association="Self.Заказы_fk1">
+            <End Role="Возвраты" EntitySet="Возвраты" />
+            <End Role="Заказы" EntitySet="Заказы" />
+          </AssociationSet>
+          <AssociationSet Name="ЗаказаноТоваров_fk0" Association="Self.ЗаказаноТоваров_fk0">
+            <End Role="Заказы" EntitySet="Заказы" />
+            <End Role="ЗаказаноТоваров" EntitySet="ЗаказаноТоваров" />
+          </AssociationSet>
+          <AssociationSet Name="ЗаказаноТоваров_fk1" Association="Self.ЗаказаноТоваров_fk1">
+            <End Role="Склад" EntitySet="Склад" />
+            <End Role="ЗаказаноТоваров" EntitySet="ЗаказаноТоваров" />
+          </AssociationSet>
+          <AssociationSet Name="Заказы_fk0" Association="Self.Заказы_fk0">
+            <End Role="Клиенты" EntitySet="Клиенты" />
+            <End Role="Заказы" EntitySet="Заказы" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище user_userModelContainer" CdmEntityContainer="user_userEntities">
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="user_userModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Возвраты">
+            <EntityTypeMapping TypeName="user_userModel.Возвраты">
+              <MappingFragment StoreEntitySet="Возвраты">
+                <ScalarProperty Name="Коробока" ColumnName="Коробока" />
+                <ScalarProperty Name="Количество_товаров" ColumnName="Количество_товаров" />
+                <ScalarProperty Name="Товары_в_коробке" ColumnName="Товары_в_коробке" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ЗаказаноТоваров">
+            <EntityTypeMapping TypeName="user_userModel.ЗаказаноТоваров">
+              <MappingFragment StoreEntitySet="ЗаказаноТоваров">
+                <ScalarProperty Name="ЗаказID" ColumnName="ЗаказID" />
+                <ScalarProperty Name="СкладID" ColumnName="СкладID" />
+                <ScalarProperty Name="Количество" ColumnName="Количество" />
+                <ScalarProperty Name="Цена_Продажи" ColumnName="Цена_Продажи" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Заказы">
+            <EntityTypeMapping TypeName="user_userModel.Заказы">
+              <MappingFragment StoreEntitySet="Заказы">
+                <ScalarProperty Name="ЗаказID" ColumnName="ЗаказID" />
+                <ScalarProperty Name="КлиентID" ColumnName="КлиентID" />
+                <ScalarProperty Name="Ячейка" ColumnName="Ячейка" />
+                <ScalarProperty Name="ДатаЗаказа" ColumnName="ДатаЗаказа" />
+                <ScalarProperty Name="Сумма" ColumnName="Сумма" />
+                <ScalarProperty Name="Количество" ColumnName="Количество" />
+                <ScalarProperty Name="Отмена" ColumnName="Отмена" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Клиенты">
+            <EntityTypeMapping TypeName="user_userModel.Клиенты">
+              <MappingFragment StoreEntitySet="Клиенты">
+                <ScalarProperty Name="КлиентID" ColumnName="КлиентID" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="имя" ColumnName="имя" />
+                <ScalarProperty Name="Телефон" ColumnName="Телефон" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Склад">
+            <EntityTypeMapping TypeName="user_userModel.Склад">
+              <MappingFragment StoreEntitySet="Склад">
+                <ScalarProperty Name="СкладID" ColumnName="СкладID" />
+                <ScalarProperty Name="Место" ColumnName="Место" />
+                <ScalarProperty Name="Код_товара" ColumnName="Код_товара" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
